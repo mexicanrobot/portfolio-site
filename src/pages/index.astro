@@ -16,18 +16,13 @@ import { Image } from 'astro:assets';
 		<main>
 			<section class="hero">
 				<div class="hero-media" aria-label="Portrait photo">
-					<Image
-						src="/photo.jpeg"
-						width={320}
-						height={320}
-						alt="Portrait of Alejandro Abaroa"
-						loading="eager"
-					/>
+					<script type="module" src="https://unpkg.com/@splinetool/viewer@1.12.41/build/spline-viewer.js"></script>
+					<spline-viewer class="spline-viewer" url="https://prod.spline.design/ypn6j98ridBmFHaO/scene.splinecode"></spline-viewer>
 				</div>
 				<div class="hero-text">
-					<h1>Hello! I'm Alejandro Abaroa</h1>
-					<p>I'm a software engineer with a passion for design, UI/UX, and building products that people love.</p>
-					<p>I've worked at companies like Thermo Fisher Scientific, Samsung Electronics, Upsun (formerly Platform.sh).</p>
+					<h1>Hello! I'm Alex.</h1>
+					<p>I'm a Software Engineer with a Master's in Graphic Design.</p>
+					<p>I specialize in the 'middle ground'—the space where design systems, frontend architecture, and user experience meet. With 10 years of experience at companies like Upsun, Samsung Electronics, and Thermo Fisher, I build accessible, performant, and scalable web platforms that help brands grow and developers move faster.</p>
 					<p>Here's my <a href="/AlexAbaroaCV.pdf" target="_blank">resume</a>.</p>
 				</div>
 			</section>
@@ -51,6 +46,11 @@ import { Image } from 'astro:assets';
 	.hero-media {
 		display: flex;
 		justify-content: center;
+	}
+
+	.spline-viewer {
+		width: 512px;
+		height: 512px;
 	}
 
 	@media (max-width: 720px) {
