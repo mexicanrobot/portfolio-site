@@ -2,7 +2,7 @@
 title: "Upsun internationalization"
 description: "Lorem ipsum dolor sit amet"
 pubDate: "Jan 28 2026"
-heroImage: "/upsun-i18n-cover.jpg"
+# heroImage: "/upsun-i18n-cover.jpg"
 postOrder: 3
 ---
 

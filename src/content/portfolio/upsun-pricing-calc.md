@@ -2,7 +2,7 @@
 title: "Upsun pricing page + calculator"
 description: "Lorem ipsum dolor sit amet"
 pubDate: "Jan 28 2026"
-heroImage: "/upsun-pricing-calc-cover.jpg"
+# heroImage: "/upsun-pricing-calc-cover.jpg"
 postOrder: 2
 ---
 

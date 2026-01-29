@@ -2,7 +2,7 @@
 title: "Dynamic blog cover image generator"
 description: "Lorem ipsum dolor sit amet"
 pubDate: "Jan 28 2026"
-heroImage: "/blog-cover-generator-cover.jpg"
+# heroImage: "/blog-cover-generator-cover.jpg"
 postOrder: 5
 ---
 

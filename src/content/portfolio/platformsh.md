@@ -2,7 +2,7 @@
 title: "Platform.sh website + component library"
 description: "Lorem ipsum dolor sit amet"
 pubDate: "Jan 28 2026"
-heroImage: "/platformsh-cover.jpeg"
+# heroImage: "/platformsh-cover.jpeg"
 postOrder: 4
 ---
 

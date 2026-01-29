@@ -2,7 +2,7 @@
 title: "Upsun website + component library"
 description: "Here is a sample of some basic Markdown syntax that can be used when writing Markdown content in Astro."
 pubDate: "Jan 28 2026"
-heroImage: "/upsun-cover.jpeg"
+# heroImage: "/upsun-cover.jpeg"
 postOrder: 1
 ---
 
