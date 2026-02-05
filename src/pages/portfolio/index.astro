@@ -68,6 +68,13 @@ const posts = (await getCollection('portfolio')).sort(
 			ul a:hover img {
 				box-shadow: var(--box-shadow);
 			}
+			.blog-post {
+				img {
+					width: 720px !important;
+					height: 360px !important;
+					object-fit: cover;
+				}
+			}
 			@media (max-width: 720px) {
 				ul {
 					gap: 0.5em;
@@ -93,7 +100,7 @@ const posts = (await getCollection('portfolio')).sort(
 					{
 						posts.map((post) => (
 							<li>
-								<a href={`/portfolio/${post.id}/`}>
+								<a href={`/portfolio/${post.id}/`} class="blog-post">
 									<img width={720} height={360} src={post.data.heroImage || "/placeholder.png"} alt="" />
 									<h4 class="title">{post.data.title}</h4>
 									<p class="date">

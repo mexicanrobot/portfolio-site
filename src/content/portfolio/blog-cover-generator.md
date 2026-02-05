@@ -1,17 +1,50 @@
 ---
 title: "Dynamic blog cover image generator"
-description: "Lorem ipsum dolor sit amet"
+description: ""
 pubDate: "Jan 28 2026"
-# heroImage: "/blog-cover-generator-cover.jpg"
+heroImage: "/blog//generator/cover.jpg"
 postOrder: 5
 ---
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Vitae ultricies leo integer malesuada nunc vel risus commodo viverra. Adipiscing enim eu turpis egestas pretium. Euismod elementum nisi quis eleifend quam adipiscing. In hac habitasse platea dictumst vestibulum. Sagittis purus sit amet volutpat. Netus et malesuada fames ac turpis egestas. Eget magna fermentum iaculis eu non diam phasellus vestibulum lorem. Varius sit amet mattis vulputate enim. Habitasse platea dictumst quisque sagittis. Integer quis auctor elit sed vulputate mi. Dictumst quisque sagittis purus sit amet.
+## Intro
 
-Morbi tristique senectus et netus. Id semper risus in hendrerit gravida rutrum quisque non tellus. Habitasse platea dictumst quisque sagittis purus sit amet. Tellus molestie nunc non blandit massa. Cursus vitae congue mauris rhoncus. Accumsan tortor posuere ac ut. Fringilla urna porttitor rhoncus dolor. Elit ullamcorper dignissim cras tincidunt lobortis. In cursus turpis massa tincidunt dui ut ornare lectus. Integer feugiat scelerisque varius morbi enim nunc. Bibendum neque egestas congue quisque egestas diam. Cras ornare arcu dui vivamus arcu felis bibendum. Dignissim suspendisse in est ante in nibh mauris. Sed tempus urna et pharetra pharetra massa massa ultricies mi.
+This piece of code was made to help the design team so they wouldn't waste time making social share images for every blog image, and speed up blog post creation.
 
-Mollis nunc sed id semper risus in. Convallis a cras semper auctor neque. Diam sit amet nisl suscipit. Lacus viverra vitae congue eu consequat ac felis donec. Egestas integer eget aliquet nibh praesent tristique magna sit amet. Eget magna fermentum iaculis eu non diam. In vitae turpis massa sed elementum. Tristique et egestas quis ipsum suspendisse ultrices. Eget lorem dolor sed viverra ipsum. Vel turpis nunc eget lorem dolor sed viverra. Posuere ac ut consequat semper viverra nam. Laoreet suspendisse interdum consectetur libero id faucibus. Diam phasellus vestibulum lorem sed risus ultricies tristique. Rhoncus dolor purus non enim praesent elementum facilisis. Ultrices tincidunt arcu non sodales neque. Tempus egestas sed sed risus pretium quam vulputate. Viverra suspendisse potenti nullam ac tortor vitae purus faucibus ornare. Fringilla urna porttitor rhoncus dolor purus non. Amet dictum sit amet justo donec enim.
+## Libraries used
 
-Mattis ullamcorper velit sed ullamcorper morbi tincidunt. Tortor posuere ac ut consequat semper viverra. Tellus mauris a diam maecenas sed enim ut sem viverra. Venenatis urna cursus eget nunc scelerisque viverra mauris in. Arcu ac tortor dignissim convallis aenean et tortor at. Curabitur gravida arcu ac tortor dignissim convallis aenean et tortor. Egestas tellus rutrum tellus pellentesque eu. Fusce ut placerat orci nulla pellentesque dignissim enim sit amet. Ut enim blandit volutpat maecenas volutpat blandit aliquam etiam. Id donec ultrices tincidunt arcu. Id cursus metus aliquam eleifend mi.
+We used Vercel's library satori that renders an SVG using HTML markup, very useful! After that we convert the image to PNG and sent it through an express miniserver.
 
-Tempus quam pellentesque nec nam aliquam sem. Risus at ultrices mi tempus imperdiet. Id porta nibh venenatis cras sed felis eget velit. Ipsum a arcu cursus vitae. Facilisis magna etiam tempor orci eu lobortis elementum. Tincidunt dui ut ornare lectus sit. Quisque non tellus orci ac. Blandit libero volutpat sed cras. Nec tincidunt praesent semper feugiat nibh sed pulvinar proin gravida. Egestas integer eget aliquet nibh praesent tristique magna.
+## Design
+
+We designed the api in this format 
+
+```
+/endpoint?type={post_type}&id={id}&size={size}
+```
+
+Where:
+* `post_type` was used for blog posts, press releases and case studies.
+* `id` is the id of the blog post, to be able to fetch details quickly
+* `size` is either `cover`, `social`, or `square`
+
+## Roadblocks
+
+### Color matching
+
+One of the hardest issues was matching the color properly: We calculated the average color of the cover image of the blog post: and then choose from a palette of brand colors. Sounds simple right? I tried calculating the "difference" between colors using some existing libraries. But there was an issue: bright colors and dark colors don't mix! If you try to calculate the "closest" color blindly you'll get some mathematically correct, but non sensical answers.
+
+### The solution
+
+I calculated the average lightness of our brand colors, and then the cover image darkened/lightened the image to that same approximate brightness. Then we got _much_ more accurate results!
+
+### Caching
+
+We also had a question: Do we build a complex Redis cache, don't cache at all, or what? For speed of development, and considering content _might_ change (a blog post title, or something), we decided a simple solution: an in-memory cache that will cache generated images. Since we didn't expect a lot of high traffic (we only get hit when someone shares the link somewhere), we expected this to be a good enough solution at the moment.
+
+## The results
+
+![Sample image](/blog/generator/image.png)
+
+![Sample image](/blog/generator/image-2.png)
+
+![Sample image](/blog/generator/image-3.png)
