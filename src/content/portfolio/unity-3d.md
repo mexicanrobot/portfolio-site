@@ -1,6 +1,7 @@
 ---
 title: "Unity 3D simulations for Samsung shown at CES"
 description: ""
+tags: ["code"]
 pubDate: "Jan 28 2026"
 heroImage: "/blog/car/car2.jpg"
 postOrder: 9

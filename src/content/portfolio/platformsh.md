@@ -1,6 +1,7 @@
 ---
 title: "Platform.sh website + component library"
 description: "Lorem ipsum dolor sit amet"
+tags: ["code"]
 pubDate: "Jan 28 2026"
 heroImage: "/blog/platform-sh-cover.png"
 postOrder: 4

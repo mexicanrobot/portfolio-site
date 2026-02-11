@@ -1,6 +1,7 @@
 ---
 title: "Upsun internationalization"
 description: "Lorem ipsum dolor sit amet"
+tags: ["code"]
 pubDate: "Jan 28 2026"
 heroImage: "/blog/i18n-upsun-cover.png"
 postOrder: 3

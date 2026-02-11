@@ -6,7 +6,7 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../../consts';
 import { getCollection } from 'astro:content';
 import FormattedDate from '../../components/FormattedDate.astro';
 
-const posts = (await getCollection('portfolio', ({ data }) => data.tags.includes('code'))).sort(
+const posts = (await getCollection('portfolio', ({ data }) => data.tags.includes('design'))).sort(
 	(a, b) => b.data.postOrder - a.data.postOrder,
 );
 ---
@@ -96,7 +96,7 @@ const posts = (await getCollection('portfolio', ({ data }) => data.tags.includes
 		<Header />
 		<main>
 			<section>
-				<h1 style="text-align:center; margin-bottom: 1.25rem;">Code</h1>
+				<h1 style="text-align:center; margin-bottom: 1.25rem;">Design</h1>
 				<ul>
 					{
 						posts.map((post) => (
@@ -117,3 +117,4 @@ const posts = (await getCollection('portfolio', ({ data }) => data.tags.includes
 		<Footer />
 	</body>
 </html>
+

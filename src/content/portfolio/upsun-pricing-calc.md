@@ -1,6 +1,7 @@
 ---
 title: "Upsun pricing page + calculator"
 description: "Lorem ipsum dolor sit amet"
+tags: ["code"]
 pubDate: "Jan 28 2026"
 heroImage: "/blog/upsun-calc-cover.png"
 postOrder: 2

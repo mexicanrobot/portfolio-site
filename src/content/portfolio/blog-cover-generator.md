@@ -1,8 +1,9 @@
 ---
 title: "Dynamic blog cover image generator"
 description: ""
+tags: ["code"]
 pubDate: "Jan 28 2026"
-heroImage: "/blog//generator/cover.jpg"
+heroImage: "/blog/generator/cover.jpg"
 postOrder: 5
 ---
 
