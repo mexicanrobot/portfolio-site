@@ -1,10 +1,13 @@
 ---
 title: "Dynamic blog cover image generator"
-description: ""
+description: "Built an automated social and cover image generator service using Vercel Satori, Express, lightness-aware brand color matching, and in-memory caching."
 tags: ["code"]
-pubDate: "Jan 28 2026"
+company: "Internal Tooling"
+role: "Software Engineer"
+stack: ["Satori", "Node / Express", "SVG-to-PNG", "Color Math"]
+featured: true
 heroImage: "/blog/generator/cover.jpg"
-postOrder: 5
+postOrder: 6
 ---
 
 ## Intro

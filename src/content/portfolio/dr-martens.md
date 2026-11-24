@@ -1,10 +1,12 @@
 ---
 title: "Dr. Martens redesign"
-description: ""
+description: "A brand identity refresh exercise for Dr. Martens featuring iconic shoe and minimalist logo variants."
 tags: ["design"]
-pubDate: "Jan 28 2026"
+company: "Design Exercise"
+role: "Brand Refresh"
+stack: ["Identity Redesign", "Iconography", "Minimalism"]
 heroImage: "/blog/martens/dr-martens-cover.png"
-postOrder: 1
+postOrder: 3
 ---
 
 For this Dr. Martens redesign, the focus was on modernizing and simplifying the iconic brand's visual identity. Two distinct logo variants were created:

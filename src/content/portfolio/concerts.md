@@ -1,10 +1,13 @@
 ---
 title: "Concert posters"
-description: ""
+description: "A series of horizontal, vertical, and festival concert poster design exercises."
 tags: ["design"]
-pubDate: "Jan 28 2026"
+company: "Design Exercise"
+role: "Graphic & Poster Design"
+stack: ["Typography", "Editorial Layout", "Print Posters"]
+featured: true
 heroImage: "/blog/concerts/concert1.jpg"
-postOrder: 1
+postOrder: 2
 ---
 
 Design exercises, three poster designs:

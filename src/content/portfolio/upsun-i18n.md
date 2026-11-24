@@ -1,10 +1,12 @@
 ---
 title: "Upsun internationalization"
-description: "Lorem ipsum dolor sit amet"
+description: "Implemented full-stack localization for Upsun using React context, Strapi CMS localization, and automated DeepL API translations."
 tags: ["code"]
-pubDate: "Jan 28 2026"
+company: "Upsun"
+role: "Full-Stack Frontend"
+stack: ["React Context", "Strapi CMS", "DeepL API", "i18n"]
 heroImage: "/blog/i18n-upsun-cover.png"
-postOrder: 3
+postOrder: 4
 ---
 
 Adding internationalization (i18n) to the Upsun website required both frontend and backend improvements to support multiple regions and languages. On the frontend, I implemented a React context to manage and provide the current region across the application, ensuring region-specific content could be easily accessed by any component. A region dropdown selector was added to the UI, allowing users to seamlessly switch between different locales.

@@ -2,8 +2,50 @@
 import BaseHead from '../components/BaseHead.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import TokenInspector from '../components/TokenInspector.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
-import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
+
+const allPosts = await getCollection('portfolio');
+const featuredPosts = allPosts
+	.filter((post) => post.data.featured)
+	.sort((a, b) => {
+		const aDesign = a.data.tags.includes('design') ? 1 : 0;
+		const bDesign = b.data.tags.includes('design') ? 1 : 0;
+		if (aDesign !== bDesign) return aDesign - bDesign;
+		return a.data.postOrder - b.data.postOrder;
+	});
+
+const codeCount = allPosts.filter((p) => p.data.tags.includes('code')).length;
+const designCount = allPosts.filter((p) => p.data.tags.includes('design')).length;
+
+const experience = [
+	{
+		code: 'LOG-01',
+		company: 'Upsun / Platform.sh',
+		focus: 'Design Systems & Frontend Architecture',
+		summary:
+			'Architected Figma-to-Style Dictionary token pipelines, multi-theme TypeScript component libraries, pricing calculators, and multi-region i18n.',
+		tags: ['TypeScript', 'React', 'Style Dictionary', 'Storybook'],
+	},
+	{
+		code: 'LOG-02',
+		company: 'Thermo Fisher',
+		focus: 'Komodo Design System Foundations',
+		summary:
+			'Built core HTML/CSS foundations documented in Storybook and automated Sketch/Abstract design token extraction into CSS variables.',
+		tags: ['Design Tokens', 'CSS Architecture', 'Storybook', 'Abstract API'],
+	},
+	{
+		code: 'LOG-03',
+		company: 'Samsung Electronics',
+		focus: 'Large-Format Displays & 3D Showcases',
+		summary:
+			'Engineered an Electron digital signage player for Banner CMS and interactive multi-device Unity 3D simulations showcased at CES.',
+		tags: ['Electron', 'Unity 3D', 'JavaScript', 'CES Hardware'],
+	},
+];
 ---
 
 <!doctype html>
@@ -14,51 +56,504 @@ import { Image } from 'astro:assets';
 	<body>
 		<Header />
 		<main>
-			<section class="hero">
-				<div class="hero-media" aria-label="Portrait photo">
-					<script type="module" src="https://unpkg.com/@splinetool/viewer@1.12.41/build/spline-viewer.js"></script>
-					<spline-viewer class="spline-viewer" url="https://prod.spline.design/ypn6j98ridBmFHaO/scene.splinecode"></spline-viewer>
+			<!-- HERO HARDWARE CHASSIS -->
+			<section class="hero-chassis panel reveal">
+				<div class="hero-chassis__rail">
+					<div class="hero-chassis__rail-left">
+						<span class="led led--ok" aria-hidden="true"></span>
+						<span class="mono-label">UNIT 01 // FRONTEND ARCHITECTURE &amp; DESIGN SYSTEMS</span>
+					</div>
+					<span class="mono-label hero-chassis__coords">SAN DIEGO, CA · 32.7°N</span>
 				</div>
-				<div class="hero-text">
-					<h1>Hello! I'm Alex.</h1>
-					<p>I'm a Software Engineer with a Master's in Graphic Design.</p>
-					<p>I specialize in the 'middle ground'—the space where design systems, frontend architecture, and user experience meet. With 10 years of experience at companies like Upsun, Samsung Electronics, and Thermo Fisher, I build accessible, performant, and scalable web platforms that help brands grow and developers move faster.</p>
-					<p>Here's my <a href="/AlexAbaroaCV.pdf" target="_blank">resume</a>.</p>
+
+				<div class="hero-grid">
+					<div class="hero-copy">
+						<div class="hero-eyebrow">
+							<span class="tag tag--accent">SOFTWARE ENGINEER</span>
+							<span class="tag">M.A. GRAPHIC DESIGN</span>
+						</div>
+
+						<h1 class="hero-title">Hello, I&rsquo;m Alex.</h1>
+
+						<p class="hero-lead">
+							I specialize in the <strong>middle ground</strong>—where design systems, frontend architecture, and user experience meet.
+						</p>
+
+						<p class="hero-bio">
+							With 10+ years of experience at companies like Upsun, Samsung Electronics, and Thermo Fisher, I build accessible, performant, and scalable web platforms that help brands grow and developers move faster.
+						</p>
+
+						<div class="hero-actions">
+							<a href="#selected-work" class="btn btn--primary">Explore Work ↓</a>
+							<a href="/AlexAbaroaCV.pdf" target="_blank" rel="noopener noreferrer" class="btn">
+								Resume PDF ↗
+							</a>
+							<a href="/about" class="btn btn--ghost">About Me →</a>
+						</div>
+
+						<div class="spec-strip">
+							<div class="spec-cell">
+								<span class="spec-cell__val">10+ YRS</span>
+								<span class="mono-label">Experience</span>
+							</div>
+							<div class="spec-cell">
+								<span class="spec-cell__val">ENG × DSGN</span>
+								<span class="mono-label">Dual Discipline</span>
+							</div>
+							<div class="spec-cell">
+								<span class="spec-cell__val">{String(allPosts.length).padStart(2, '0')} CASES</span>
+								<span class="mono-label">Code &amp; Brand</span>
+							</div>
+						</div>
+					</div>
+
+					<div class="display-bay">
+						<div class="display-bay__header">
+							<span class="mono-label">PORTRAIT BAY // 3D WEBGL</span>
+							<span class="mono-label display-bay__hint">DRAG TO ORBIT</span>
+						</div>
+
+						<div class="display-bay__viewport" aria-label="Interactive 3D portrait">
+							<script
+								type="module"
+								src="https://unpkg.com/@splinetool/viewer@1.12.41/build/spline-viewer.js"
+							></script>
+							<spline-viewer
+								class="spline-viewer"
+								url="https://prod.spline.design/ypn6j98ridBmFHaO/scene.splinecode"
+							></spline-viewer>
+						</div>
+
+						<div class="display-bay__footer">
+							<span class="mono-label">MODEL AA-01</span>
+							<span class="mono-label">INTERACTIVE SCENE</span>
+						</div>
+					</div>
 				</div>
 			</section>
+
+			<!-- EXPERIENCE SPEC LOG -->
+			<section class="section-block reveal" aria-label="Experience">
+				<div class="section-header">
+					<div>
+						<div class="section-kicker">
+							<span class="led" aria-hidden="true"></span>
+							<span class="mono-label">TRACK RECORD // HARDWARE LOG</span>
+						</div>
+						<h2>Where I&rsquo;ve shipped.</h2>
+					</div>
+					<a href="/AlexAbaroaCV.pdf" target="_blank" rel="noopener noreferrer" class="mono-link">
+						FULL CV PDF ↗
+					</a>
+				</div>
+
+				<div class="exp-grid">
+					{
+						experience.map((item) => (
+							<article class="exp-card panel-elevated">
+								<div class="exp-card__top">
+									<span class="mono-label">{item.code}</span>
+									<span class="exp-card__screw" aria-hidden="true"></span>
+								</div>
+								<h3 class="exp-card__company">{item.company}</h3>
+								<p class="exp-card__focus">{item.focus}</p>
+								<p class="exp-card__summary">{item.summary}</p>
+								<div class="exp-card__tags">
+									{item.tags.map((t) => (
+										<span class="tag">{t}</span>
+									))}
+								</div>
+							</article>
+						))
+					}
+				</div>
+			</section>
+
+			<!-- SELECTED WORK -->
+			<section id="selected-work" class="section-block reveal" aria-label="Selected work">
+				<div class="section-header">
+					<div>
+						<div class="section-kicker">
+							<span class="led" aria-hidden="true"></span>
+							<span class="mono-label">SELECTED WORK // FEATURED MODULES</span>
+						</div>
+						<h2>Systems, tools &amp; visual craft.</h2>
+					</div>
+
+					<div class="filter-rack" role="tablist" aria-label="Filter featured work">
+						<button type="button" class="filter-key is-active" data-filter="all" role="tab" aria-selected="true">
+							ALL ({featuredPosts.length})
+						</button>
+						<button type="button" class="filter-key" data-filter="code" role="tab" aria-selected="false">
+							CODE ({featuredPosts.filter((p) => p.data.tags.includes('code')).length})
+						</button>
+						<button type="button" class="filter-key" data-filter="design" role="tab" aria-selected="false">
+							DESIGN ({featuredPosts.filter((p) => p.data.tags.includes('design')).length})
+						</button>
+					</div>
+				</div>
+
+				<div class="work-grid" id="featured-work-grid">
+					{
+						featuredPosts.map((post, idx) => {
+							const prefix = post.data.tags.includes('design') ? 'DSGN' : 'CODE';
+							const label = `${prefix} // ${String(idx + 1).padStart(2, '0')}`;
+							return (
+								<div class="work-grid__item" data-item-cat={post.data.tags.includes('design') ? 'design' : 'code'}>
+									<ProjectCard post={post} indexLabel={label} />
+								</div>
+							);
+						})
+					}
+				</div>
+
+				<div class="archive-bar">
+					<a href="/portfolio" class="btn">
+						All Code Projects ({String(codeCount).padStart(2, '0')}) →
+					</a>
+					<a href="/portfolio/design" class="btn">
+						All Design Work ({String(designCount).padStart(2, '0')}) →
+					</a>
+				</div>
+			</section>
+
+			<!-- LIVE DESIGN TOKEN INSPECTOR -->
+			<TokenInspector />
 		</main>
 		<Footer />
 	</body>
 </html>
 
+<script is:inline>
+	(() => {
+		const buttons = document.querySelectorAll('[data-filter]');
+		const items = document.querySelectorAll('[data-item-cat]');
+		buttons.forEach((btn) => {
+			btn.addEventListener('click', () => {
+				const filter = btn.getAttribute('data-filter');
+				buttons.forEach((b) => {
+					const active = b === btn;
+					b.classList.toggle('is-active', active);
+					b.setAttribute('aria-selected', String(active));
+				});
+				items.forEach((item) => {
+					const cat = item.getAttribute('data-item-cat');
+					const show = filter === 'all' || cat === filter;
+					item.toggleAttribute('hidden', !show);
+				});
+			});
+		});
+	})();
+</script>
+
 <style>
-	.hero {
-		display: grid;
-		grid-template-columns: 1fr 1fr;
-		align-items: center;
-		gap: 2rem;
+	.hero-chassis {
+		overflow: hidden;
 	}
 
-	.hero-text :global(h1) {
-		margin-bottom: 0.75rem;
-	}
-
-	.hero-media {
+	.hero-chassis__rail {
 		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1rem;
+		padding: 0.7rem 1.5rem;
+		background: var(--surface-elevated);
+		border-bottom: 1px solid var(--border);
+	}
+
+	.hero-chassis__rail-left {
+		display: flex;
+		align-items: center;
+		gap: 0.55rem;
+	}
+
+	.hero-grid {
+		display: grid;
+		grid-template-columns: 1.15fr 0.85fr;
+		gap: 2.25rem;
+		padding: 2rem 1.75rem;
+		align-items: center;
+	}
+
+	.hero-eyebrow {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.45rem;
+		margin-bottom: 1rem;
+	}
+
+	.hero-title {
+		margin-bottom: 0.9rem;
+	}
+
+	.hero-lead {
+		font-size: 1.18rem;
+		line-height: 1.5;
+		color: var(--ink);
+		margin-bottom: 0.9rem;
+		max-width: 48ch;
+	}
+
+	.hero-lead strong {
+		color: var(--accent);
+		font-weight: 600;
+	}
+
+	.hero-bio {
+		font-size: 0.98rem;
+		line-height: 1.65;
+		max-width: 56ch;
+		margin-bottom: 1.5rem;
+	}
+
+	.hero-actions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.65rem;
+		margin-bottom: 1.75rem;
+	}
+
+	.btn--ghost {
+		background: transparent;
+		box-shadow: none;
+	}
+
+	.spec-strip {
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		gap: 0.75rem;
+		padding-top: 1.25rem;
+		border-top: 1px solid var(--border);
+	}
+
+	.spec-cell {
+		display: flex;
+		flex-direction: column;
+		gap: 0.15rem;
+		padding: 0.65rem 0.8rem;
+		border-radius: var(--radius-sm);
+		background: var(--surface-recessed);
+		border: 1px solid var(--border);
+		box-shadow: var(--shadow-recessed);
+	}
+
+	.spec-cell__val {
+		font-family: var(--font-display);
+		font-size: 0.98rem;
+		font-weight: 700;
+		color: var(--ink);
+		letter-spacing: -0.01em;
+	}
+
+	/* 3D Spline Display Bay */
+	.display-bay {
+		display: flex;
+		flex-direction: column;
+		border-radius: var(--radius-md);
+		background: var(--surface-elevated);
+		border: 1px solid var(--border-strong);
+		box-shadow: var(--shadow-bevel);
+		overflow: hidden;
+	}
+
+	.display-bay__header,
+	.display-bay__footer {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		padding: 0.55rem 0.9rem;
+		background: var(--surface-elevated);
+	}
+
+	.display-bay__header {
+		border-bottom: 1px solid var(--border);
+	}
+
+	.display-bay__footer {
+		border-top: 1px solid var(--border);
+	}
+
+	.display-bay__hint {
+		color: var(--accent);
+	}
+
+	.display-bay__viewport {
+		position: relative;
+		width: 100%;
+		height: 410px;
+		background:
+			radial-gradient(circle at 50% 45%, color-mix(in srgb, var(--accent) 12%, var(--surface-recessed)), var(--surface-recessed));
+		overflow: hidden;
+		display: flex;
+		align-items: center;
 		justify-content: center;
 	}
 
 	.spline-viewer {
 		width: 512px;
 		height: 512px;
+		flex-shrink: 0;
+		display: block;
+		transform: scale(0.84);
+		transform-origin: center;
 	}
 
-	@media (max-width: 720px) {
-		.hero {
+	/* Sections */
+	.section-block {
+		margin-top: 3.75rem;
+	}
+
+	.mono-link {
+		font-family: var(--font-mono);
+		font-size: 0.78rem;
+		font-weight: 600;
+		letter-spacing: 0.06em;
+		text-decoration: none;
+	}
+
+	/* Experience Cards */
+	.exp-grid {
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		gap: 1.2rem;
+	}
+
+	.exp-card {
+		padding: 1.35rem;
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+	}
+
+	.exp-card__top {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		margin-bottom: 0.3rem;
+	}
+
+	.exp-card__screw {
+		width: 10px;
+		height: 10px;
+		border-radius: 999px;
+		border: 1px solid var(--border-strong);
+		background: linear-gradient(135deg, transparent 44%, var(--border-strong) 45%, var(--border-strong) 55%, transparent 56%);
+	}
+
+	.exp-card__company {
+		font-size: 1.18rem;
+		margin: 0;
+	}
+
+	.exp-card__focus {
+		font-family: var(--font-mono);
+		font-size: 0.78rem;
+		color: var(--accent);
+		margin: 0 0 0.25rem;
+	}
+
+	.exp-card__summary {
+		font-size: 0.92rem;
+		line-height: 1.55;
+		margin: 0;
+	}
+
+	.exp-card__tags {
+		margin-top: auto;
+		padding-top: 0.85rem;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.35rem;
+	}
+
+	/* Filter Rack & Featured Work */
+	.filter-rack {
+		display: inline-flex;
+		gap: 0.25rem;
+		padding: 0.25rem;
+		border-radius: 9px;
+		background: var(--surface-recessed);
+		border: 1px solid var(--border);
+		box-shadow: var(--shadow-recessed);
+	}
+
+	.filter-key {
+		appearance: none;
+		border: 1px solid transparent;
+		background: transparent;
+		color: var(--ink-muted);
+		font-family: var(--font-mono);
+		font-size: 0.74rem;
+		font-weight: 600;
+		letter-spacing: 0.05em;
+		padding: 0.42rem 0.8rem;
+		border-radius: 6px;
+		cursor: pointer;
+		transition: all 0.16s ease;
+	}
+
+	.filter-key:hover {
+		color: var(--ink);
+	}
+
+	.filter-key.is-active {
+		background: var(--surface-elevated);
+		color: var(--ink);
+		border-color: var(--border-strong);
+		box-shadow: var(--shadow-bevel);
+	}
+
+	.work-grid {
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		gap: 1.35rem;
+	}
+
+	.work-grid__item[hidden] {
+		display: none;
+	}
+
+	.archive-bar {
+		display: flex;
+		justify-content: center;
+		gap: 0.85rem;
+		margin-top: 2rem;
+		flex-wrap: wrap;
+	}
+
+	@media (max-width: 960px) {
+		.hero-grid {
+			grid-template-columns: 1fr;
+			padding: 1.5rem;
+		}
+		.display-bay {
+			order: -1;
+			max-width: 440px;
+			margin: 0 auto;
+			width: 100%;
+		}
+		.exp-grid,
+		.work-grid {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+	}
+
+	@media (max-width: 640px) {
+		.hero-chassis__coords {
+			display: none;
+		}
+		.hero-chassis__rail {
+			padding: 0.65rem 1rem;
+		}
+		.hero-grid {
+			padding: 1.25rem;
+		}
+		.spec-strip {
 			grid-template-columns: 1fr;
 		}
-		.hero-media {
-			order: -1;
+		.exp-grid,
+		.work-grid {
+			grid-template-columns: 1fr;
 		}
 	}
 </style>

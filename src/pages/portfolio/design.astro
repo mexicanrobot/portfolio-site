@@ -2,119 +2,261 @@
 import BaseHead from '../../components/BaseHead.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
-import { SITE_TITLE, SITE_DESCRIPTION } from '../../consts';
+import ProjectCard from '../../components/ProjectCard.astro';
+import { SITE_TITLE } from '../../consts';
 import { getCollection } from 'astro:content';
-import FormattedDate from '../../components/FormattedDate.astro';
 
 const posts = (await getCollection('portfolio', ({ data }) => data.tags.includes('design'))).sort(
-	(a, b) => b.data.postOrder - a.data.postOrder,
+	(a, b) => a.data.postOrder - b.data.postOrder,
 );
+const codeCount = (await getCollection('portfolio', ({ data }) => data.tags.includes('code'))).length;
+
+const [featured, ...rest] = posts;
 ---
 
 <!doctype html>
 <html lang="en">
 	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-		<style>
-			main {
-				width: 960px;
-			}
-			ul {
-				display: flex;
-				flex-wrap: wrap;
-				gap: 2rem;
-				list-style-type: none;
-				margin: 0;
-				padding: 0;
-			}
-			ul li {
-				width: calc(50% - 1rem);
-			}
-			ul li * {
-				text-decoration: none;
-				transition: 0.2s ease;
-			}
-			ul li:first-child {
-				width: 100%;
-				margin-bottom: 1rem;
-				text-align: center;
-			}
-			ul li:first-child img {
-				width: 100%;
-			}
-			ul li:first-child .title {
-				font-size: 2.369rem;
-			}
-			ul li img {
-				margin-bottom: 0.5rem;
-				border-radius: 12px;
-			}
-			ul li a {
-				display: block;
-			}
-			.title {
-				margin: 0;
-				color: rgb(var(--black));
-				line-height: 1;
-			}
-			.date {
-				margin: 0;
-				color: rgb(var(--gray));
-			}
-			ul li a:hover h4,
-			ul li a:hover .date {
-				color: rgb(var(--accent));
-			}
-			ul a:hover img {
-				box-shadow: var(--box-shadow);
-			}
-			.blog-post {
-				img {
-					width: 720px !important;
-					height: 360px !important;
-					object-fit: cover;
-				}
-			}
-			@media (max-width: 720px) {
-				ul {
-					gap: 0.5em;
-				}
-				ul li {
-					width: 100%;
-					text-align: center;
-				}
-				ul li:first-child {
-					margin-bottom: 0;
-				}
-				ul li:first-child .title {
-					font-size: 1.563em;
-				}
-			}
-		</style>
+		<BaseHead
+			title={`Design | ${SITE_TITLE}`}
+			description="Graphic design, branding, and poster design projects by Alejandro Abaroa."
+		/>
 	</head>
 	<body>
 		<Header />
 		<main>
-			<section>
-				<h1 style="text-align:center; margin-bottom: 1.25rem;">Design</h1>
-				<ul>
-					{
-						posts.map((post) => (
-							<li>
-								<a href={`/portfolio/${post.id}/`} class="blog-post">
-									<img width={720} height={360} src={post.data.heroImage || "/placeholder.png"} alt="" />
-									<h4 class="title">{post.data.title}</h4>
-									<p class="date">
-										<FormattedDate date={post.data.pubDate} />
-									</p>
-								</a>
-							</li>
-						))
-					}
-				</ul>
+			<header class="archive-head panel reveal">
+				<div class="archive-head__info">
+					<div class="section-kicker">
+						<span class="led" aria-hidden="true"></span>
+						<span class="mono-label">ARCHIVE // GRAPHIC &amp; BRAND DESIGN</span>
+					</div>
+					<h1>Design</h1>
+					<p class="archive-head__desc">
+						Visual identity exercises, mascot illustration, typography-driven concert posters, and brand redesign explorations.
+					</p>
+				</div>
+
+				<div class="archive-head__controls">
+					<div class="archive-switch" role="navigation" aria-label="Portfolio discipline">
+						<a href="/portfolio" class="archive-switch__tab">
+							CODE ({String(codeCount).padStart(2, '0')})
+						</a>
+						<a href="/portfolio/design" class="archive-switch__tab is-active">
+							DESIGN ({String(posts.length).padStart(2, '0')})
+						</a>
+					</div>
+				</div>
+			</header>
+
+			{
+				featured && (
+					<section class="featured-slot reveal" aria-label="Featured design project">
+						<a href={`/portfolio/${featured.id}/`} class="featured-card panel">
+							<div class="featured-card__media">
+								<img
+									width={960}
+									height={540}
+									src={featured.data.heroImage || '/placeholder.png'}
+									alt={featured.data.title}
+								/>
+							</div>
+							<div class="featured-card__body">
+								<div class="featured-card__meta">
+									<span class="tag tag--accent">FEATURED // 01</span>
+									{featured.data.company && <span class="mono-label">{featured.data.company}</span>}
+								</div>
+								<h2 class="featured-card__title">{featured.data.title}</h2>
+								<p class="featured-card__desc">{featured.data.description}</p>
+								{featured.data.stack.length > 0 && (
+									<div class="featured-card__tags">
+										{featured.data.stack.map((item) => (
+											<span class="tag">{item}</span>
+										))}
+									</div>
+								)}
+								<span class="featured-card__cta">VIEW DESIGN STUDY →</span>
+							</div>
+						</a>
+					</section>
+				)
+			}
+
+			<section class="archive-grid reveal" aria-label="More design projects">
+				{
+					rest.map((post, idx) => (
+						<ProjectCard
+							post={post}
+							indexLabel={`DSGN // ${String(idx + 2).padStart(2, '0')}`}
+						/>
+					))
+				}
 			</section>
 		</main>
 		<Footer />
 	</body>
 </html>
 
+<style>
+	.archive-head {
+		padding: 1.75rem;
+		display: flex;
+		align-items: flex-end;
+		justify-content: space-between;
+		gap: 1.5rem;
+		flex-wrap: wrap;
+		margin-bottom: 1.75rem;
+	}
+
+	.archive-head__desc {
+		margin: 0;
+		max-width: 58ch;
+	}
+
+	.archive-switch {
+		display: inline-flex;
+		gap: 0.25rem;
+		padding: 0.25rem;
+		border-radius: 9px;
+		background: var(--surface-recessed);
+		border: 1px solid var(--border);
+		box-shadow: var(--shadow-recessed);
+	}
+
+	.archive-switch__tab {
+		font-family: var(--font-mono);
+		font-size: 0.74rem;
+		font-weight: 600;
+		letter-spacing: 0.05em;
+		text-decoration: none;
+		color: var(--ink-muted);
+		padding: 0.45rem 0.85rem;
+		border-radius: 6px;
+		border: 1px solid transparent;
+	}
+
+	.archive-switch__tab:hover {
+		color: var(--ink);
+	}
+
+	.archive-switch__tab.is-active {
+		background: var(--surface-elevated);
+		color: var(--ink);
+		border-color: var(--border-strong);
+		box-shadow: var(--shadow-bevel);
+	}
+
+	.featured-slot {
+		margin-bottom: 1.75rem;
+	}
+
+	.featured-card {
+		display: grid;
+		grid-template-columns: 1.25fr 1fr;
+		text-decoration: none;
+		color: inherit;
+		overflow: hidden;
+		transition:
+			transform 0.22s var(--ease-tactile),
+			border-color 0.22s ease,
+			box-shadow 0.22s var(--ease-tactile);
+	}
+
+	.featured-card:hover {
+		transform: translateY(-3px);
+		border-color: var(--accent);
+		box-shadow: var(--shadow-card-hover);
+	}
+
+	.featured-card__media {
+		background: var(--surface-recessed);
+		overflow: hidden;
+		border-right: 1px solid var(--border);
+		min-height: 280px;
+	}
+
+	.featured-card__media img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		transition: transform 0.45s var(--ease-tactile);
+	}
+
+	.featured-card:hover .featured-card__media img {
+		transform: scale(1.03);
+	}
+
+	.featured-card__body {
+		padding: 1.75rem;
+		display: flex;
+		flex-direction: column;
+		gap: 0.75rem;
+	}
+
+	.featured-card__meta {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 0.75rem;
+	}
+
+	.featured-card__title {
+		margin: 0;
+		font-size: clamp(1.35rem, 2.2vw, 1.75rem);
+		transition: color 0.18s ease;
+	}
+
+	.featured-card:hover .featured-card__title {
+		color: var(--accent);
+	}
+
+	.featured-card__desc {
+		margin: 0;
+		font-size: 0.96rem;
+		line-height: 1.6;
+	}
+
+	.featured-card__tags {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.4rem;
+		margin-top: 0.25rem;
+	}
+
+	.featured-card__cta {
+		margin-top: auto;
+		padding-top: 0.75rem;
+		font-family: var(--font-mono);
+		font-size: 0.78rem;
+		font-weight: 600;
+		letter-spacing: 0.06em;
+		color: var(--accent);
+	}
+
+	.archive-grid {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 1.35rem;
+	}
+
+	@media (max-width: 860px) {
+		.featured-card {
+			grid-template-columns: 1fr;
+		}
+		.featured-card__media {
+			border-right: none;
+			border-bottom: 1px solid var(--border);
+			aspect-ratio: 16 / 9;
+			min-height: 0;
+		}
+	}
+
+	@media (max-width: 640px) {
+		.archive-head {
+			padding: 1.25rem;
+		}
+		.archive-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>

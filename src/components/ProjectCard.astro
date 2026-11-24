@@ -1,0 +1,44 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+	post: CollectionEntry<'portfolio'>;
+	indexLabel: string;
+}
+
+const { post, indexLabel } = Astro.props;
+const { title, description, heroImage, company, stack = [], tags = [] } = post.data;
+const category = tags.includes('design') ? 'design' : 'code';
+---
+
+<a href={`/portfolio/${post.id}/`} class="project-card" data-category={category}>
+	<div class="project-card__bar">
+		<span class="project-card__index">
+			<span class="project-card__dot" aria-hidden="true"></span>
+			<span class="mono-label">{indexLabel}</span>
+		</span>
+		{company && <span class="mono-label">{company}</span>}
+	</div>
+	<div class="project-card__media">
+		<img
+			width={720}
+			height={405}
+			src={heroImage || '/placeholder.png'}
+			alt={title}
+			loading="lazy"
+		/>
+	</div>
+	<div class="project-card__body">
+		<h3 class="project-card__title">{title}</h3>
+		{description && <p class="project-card__desc">{description}</p>}
+		{
+			stack.length > 0 && (
+				<div class="project-card__tags">
+					{stack.slice(0, 3).map((item) => (
+						<span class="tag">{item}</span>
+					))}
+				</div>
+			)
+		}
+	</div>
+</a>

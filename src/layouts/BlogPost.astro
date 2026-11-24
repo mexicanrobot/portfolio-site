@@ -3,83 +3,481 @@ import type { CollectionEntry } from 'astro:content';
 import BaseHead from '../components/BaseHead.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import FormattedDate from '../components/FormattedDate.astro';
+import { SITE_TITLE } from '../consts';
 
-type Props = CollectionEntry<'portfolio'>['data'];
+interface NavTarget {
+	id: string;
+	title: string;
+}
 
-const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
+type Props = Omit<CollectionEntry<'portfolio'>['data'], 'postOrder'> & {
+	prev?: NavTarget;
+	next?: NavTarget;
+	moduleNumber?: string;
+};
+
+const {
+	title,
+	description,
+	heroImage,
+	company,
+	role,
+	stack = [],
+	tags = [],
+	prev,
+	next,
+	moduleNumber = '01',
+} = Astro.props;
+
+const isDesign = tags.includes('design');
+const backHref = isDesign ? '/portfolio/design' : '/portfolio';
+const backLabel = isDesign ? 'Design Archive' : 'Code Archive';
+const disciplineCode = isDesign ? 'DSGN' : 'CODE';
 ---
 
+<!doctype html>
 <html lang="en">
 	<head>
-		<BaseHead title={title} description={description} />
-		<style>
-			main {
-				width: calc(100% - 2em);
-				max-width: 100%;
-				margin: 0;
-			}
-			.hero-image {
-				width: 100%;
-			}
-			.hero-image img {
-				display: block;
-				margin: 0 auto;
-				border-radius: 12px;
-				box-shadow: var(--box-shadow);
-			}
-			.prose {
-				width: 720px;
-				max-width: calc(100% - 2em);
-				margin: auto;
-				padding: 1em;
-				color: rgb(var(--gray-dark));
-			}
-			.title {
-				margin-bottom: 1em;
-				padding: 1em 0;
-				text-align: center;
-				line-height: 1;
-			}
-			.title h1 {
-				margin: 0 0 0.5em 0;
-			}
-			.date {
-				margin-bottom: 0.5em;
-				color: rgb(var(--gray));
-			}
-			.last-updated-on {
-				font-style: italic;
-			}
-		</style>
+		<BaseHead
+			title={`${title} | ${SITE_TITLE}`}
+			description={description}
+			image={heroImage}
+		/>
 	</head>
 
 	<body>
-		<Header />
-		<main>
-			<article>
-				<div class="hero-image">
-					{<img width={1020} height={510} src={heroImage || "/placeholder.png"} alt="" />}
-				</div>
-				<div class="prose">
-					<div class="title">
-						<div class="date">
-							<FormattedDate date={pubDate} />
-							{
-								updatedDate && (
-									<div class="last-updated-on">
-										Last updated on <FormattedDate date={updatedDate} />
-									</div>
-								)
-							}
-						</div>
-						<h1>{title}</h1>
-						<hr />
+		<Header activeSection={isDesign ? 'design' : 'code'} />
+		<main class="case-main">
+			<div class="case-topbar reveal">
+				<a href={backHref} class="back-key">← {backLabel}</a>
+				<span class="mono-label">
+					{disciplineCode} // MODULE {moduleNumber}
+				</span>
+			</div>
+
+			<article class="case-shell panel reveal">
+				<header class="case-header">
+					<div class="case-header__kicker">
+						<span class="led" aria-hidden="true"></span>
+						<span class="mono-label">{isDesign ? 'DESIGN STUDY' : 'ENGINEERING CASE STUDY'}</span>
 					</div>
+					<h1 class="case-title">{title}</h1>
+					{description && <p class="case-deck">{description}</p>}
+
+					{
+						(company || role || stack.length > 0) && (
+							<div class="case-specs">
+								{company && (
+									<div class="case-spec">
+										<span class="mono-label">ORGANIZATION</span>
+										<span class="case-spec__val">{company}</span>
+									</div>
+								)}
+								{role && (
+									<div class="case-spec">
+										<span class="mono-label">ROLE</span>
+										<span class="case-spec__val">{role}</span>
+									</div>
+								)}
+								{stack.length > 0 && (
+									<div class="case-spec case-spec--stack">
+										<span class="mono-label">DISCIPLINES &amp; STACK</span>
+										<div class="case-spec__tags">
+											{stack.map((item) => (
+												<span class="tag">{item}</span>
+											))}
+										</div>
+									</div>
+								)}
+							</div>
+						)
+					}
+				</header>
+
+				<div class="case-hero">
+					<img
+						width={1020}
+						height={510}
+						src={heroImage || '/placeholder.png'}
+						alt={title}
+						data-lightbox-src={heroImage || '/placeholder.png'}
+					/>
+				</div>
+
+				<div class="prose" id="case-prose">
 					<slot />
 				</div>
 			</article>
+
+			{
+				(prev || next) && (
+					<nav class="case-nav reveal" aria-label="Adjacent projects">
+						{prev ? (
+							<a href={`/portfolio/${prev.id}/`} class="case-nav__card panel-elevated">
+								<span class="mono-label">← PREVIOUS</span>
+								<span class="case-nav__title">{prev.title}</span>
+							</a>
+						) : (
+							<div />
+						)}
+						{next ? (
+							<a href={`/portfolio/${next.id}/`} class="case-nav__card case-nav__card--next panel-elevated">
+								<span class="mono-label">NEXT →</span>
+								<span class="case-nav__title">{next.title}</span>
+							</a>
+						) : (
+							<div />
+						)}
+					</nav>
+				)
+			}
 		</main>
+
+		<!-- Hardware Lightbox for case study & design artwork -->
+		<div class="lightbox" id="lightbox" hidden role="dialog" aria-modal="true" aria-label="Image preview">
+			<div class="lightbox__bar">
+				<span class="mono-label lightbox__caption" id="lightbox-caption">IMAGE INSPECTOR</span>
+				<button type="button" class="lightbox__close" id="lightbox-close" aria-label="Close preview">
+					ESC / CLOSE ✕
+				</button>
+			</div>
+			<div class="lightbox__stage" id="lightbox-stage">
+				<img id="lightbox-img" src="" alt="" />
+			</div>
+		</div>
+
 		<Footer />
 	</body>
 </html>
+
+<script is:inline>
+	(() => {
+		const lightbox = document.getElementById('lightbox');
+		const lbImg = document.getElementById('lightbox-img');
+		const lbCaption = document.getElementById('lightbox-caption');
+		const lbClose = document.getElementById('lightbox-close');
+		const lbStage = document.getElementById('lightbox-stage');
+		if (!lightbox || !lbImg || !lbCaption || !lbClose || !lbStage) return;
+
+		const openLightbox = (src, alt) => {
+			lbImg.src = src;
+			lbImg.alt = alt || '';
+			lbCaption.textContent = alt ? alt.toUpperCase() : 'IMAGE INSPECTOR';
+			lightbox.hidden = false;
+			document.body.style.overflow = 'hidden';
+		};
+
+		const closeLightbox = () => {
+			lightbox.hidden = true;
+			lbImg.src = '';
+			document.body.style.overflow = '';
+		};
+
+		document.querySelectorAll('#case-prose img, .case-hero img').forEach((img) => {
+			img.setAttribute('title', 'Click to expand');
+			img.addEventListener('click', () => {
+				openLightbox(img.getAttribute('src') || '', img.getAttribute('alt') || '');
+			});
+		});
+
+		lbClose.addEventListener('click', closeLightbox);
+		lbStage.addEventListener('click', (e) => {
+			if (e.target === lbStage) closeLightbox();
+		});
+		document.addEventListener('keydown', (e) => {
+			if (e.key === 'Escape' && !lightbox.hidden) closeLightbox();
+		});
+	})();
+</script>
+
+<style>
+	.case-main {
+		max-width: 960px;
+	}
+
+	.case-topbar {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1rem;
+		margin-bottom: 1.25rem;
+	}
+
+	.back-key {
+		font-family: var(--font-mono);
+		font-size: 0.76rem;
+		font-weight: 600;
+		letter-spacing: 0.05em;
+		text-transform: uppercase;
+		text-decoration: none;
+		color: var(--ink-muted);
+		padding: 0.45rem 0.85rem;
+		border-radius: 7px;
+		background: var(--surface-elevated);
+		border: 1px solid var(--border);
+		box-shadow: var(--shadow-bevel);
+	}
+
+	.back-key:hover {
+		color: var(--accent);
+		border-color: var(--accent);
+	}
+
+	.case-shell {
+		overflow: hidden;
+	}
+
+	.case-header {
+		padding: 2rem 2.25rem 1.75rem;
+		border-bottom: 1px solid var(--border);
+	}
+
+	.case-header__kicker {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		margin-bottom: 0.75rem;
+	}
+
+	.case-title {
+		font-size: clamp(1.8rem, 3.6vw, 2.75rem);
+		margin-bottom: 0.75rem;
+	}
+
+	.case-deck {
+		font-size: 1.08rem;
+		line-height: 1.55;
+		color: var(--ink-muted);
+		max-width: 64ch;
+		margin: 0 0 1.5rem;
+	}
+
+	.case-specs {
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		gap: 0.85rem;
+		padding-top: 1.25rem;
+		border-top: 1px solid var(--border);
+	}
+
+	.case-spec {
+		display: flex;
+		flex-direction: column;
+		gap: 0.35rem;
+		padding: 0.75rem 0.9rem;
+		border-radius: var(--radius-sm);
+		background: var(--surface-recessed);
+		border: 1px solid var(--border);
+		box-shadow: var(--shadow-recessed);
+	}
+
+	.case-spec__val {
+		font-family: var(--font-display);
+		font-size: 0.98rem;
+		font-weight: 600;
+		color: var(--ink);
+	}
+
+	.case-spec__tags {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.35rem;
+	}
+
+	.case-hero {
+		background: var(--surface-recessed);
+		border-bottom: 1px solid var(--border);
+		padding: 1.25rem;
+	}
+
+	.case-hero img {
+		width: 100%;
+		max-height: 540px;
+		object-fit: contain;
+		background: var(--surface-elevated);
+		border-radius: var(--radius-md);
+		border: 1px solid var(--border);
+		cursor: zoom-in;
+		transition: transform 0.25s var(--ease-tactile);
+	}
+
+	.case-hero img:hover {
+		transform: scale(1.008);
+	}
+
+	.prose {
+		max-width: 740px;
+		margin: 0 auto;
+		padding: 2.25rem 2rem 2.75rem;
+		font-size: 1.03rem;
+		line-height: 1.75;
+		color: var(--ink-muted);
+	}
+
+	.prose :global(h2) {
+		margin-top: 2.2rem;
+		margin-bottom: 0.75rem;
+		font-size: 1.45rem;
+		padding-bottom: 0.45rem;
+		border-bottom: 1px solid var(--border);
+	}
+
+	.prose :global(h3) {
+		margin-top: 1.65rem;
+		margin-bottom: 0.5rem;
+		font-size: 1.15rem;
+	}
+
+	.prose :global(p) {
+		margin-bottom: 1.25rem;
+	}
+
+	.prose :global(ul),
+	.prose :global(ol) {
+		margin: 0 0 1.4rem;
+		padding-left: 1.35rem;
+		color: var(--ink-muted);
+	}
+
+	.prose :global(li) {
+		margin-bottom: 0.5rem;
+	}
+
+	.prose :global(strong) {
+		color: var(--ink);
+	}
+
+	.prose :global(img) {
+		margin: 1.5rem auto;
+		border-radius: var(--radius-md);
+		border: 1px solid var(--border);
+		box-shadow: var(--shadow-card);
+		cursor: zoom-in;
+		transition: transform 0.2s var(--ease-tactile), border-color 0.2s ease;
+	}
+
+	.prose :global(img:hover) {
+		border-color: var(--accent);
+		transform: translateY(-2px);
+	}
+
+	/* Prev / Next Navigation */
+	.case-nav {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 1rem;
+		margin-top: 1.75rem;
+	}
+
+	.case-nav__card {
+		display: flex;
+		flex-direction: column;
+		gap: 0.35rem;
+		padding: 1.15rem 1.25rem;
+		text-decoration: none;
+		color: inherit;
+		transition: transform 0.18s var(--ease-tactile), border-color 0.18s ease;
+	}
+
+	.case-nav__card:hover {
+		transform: translateY(-2px);
+		border-color: var(--accent);
+	}
+
+	.case-nav__card--next {
+		text-align: right;
+	}
+
+	.case-nav__title {
+		font-family: var(--font-display);
+		font-size: 1.05rem;
+		font-weight: 600;
+		color: var(--ink);
+	}
+
+	.case-nav__card:hover .case-nav__title {
+		color: var(--accent);
+	}
+
+	/* Lightbox */
+	.lightbox[hidden] {
+		display: none;
+	}
+
+	.lightbox {
+		position: fixed;
+		inset: 0;
+		z-index: 100;
+		background: rgba(10, 12, 16, 0.92);
+		backdrop-filter: blur(10px);
+		display: flex;
+		flex-direction: column;
+	}
+
+	.lightbox__bar {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		padding: 0.85rem 1.5rem;
+		border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+		background: rgba(18, 20, 26, 0.85);
+	}
+
+	.lightbox__caption {
+		color: rgba(255, 255, 255, 0.78);
+	}
+
+	.lightbox__close {
+		appearance: none;
+		font-family: var(--font-mono);
+		font-size: 0.74rem;
+		font-weight: 600;
+		letter-spacing: 0.06em;
+		color: #ffffff;
+		background: rgba(255, 255, 255, 0.08);
+		border: 1px solid rgba(255, 255, 255, 0.2);
+		border-radius: 6px;
+		padding: 0.42rem 0.8rem;
+		cursor: pointer;
+	}
+
+	.lightbox__close:hover {
+		background: rgba(255, 255, 255, 0.16);
+	}
+
+	.lightbox__stage {
+		flex: 1;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 1.5rem;
+		overflow: auto;
+	}
+
+	.lightbox__stage img {
+		max-width: 92vw;
+		max-height: 82vh;
+		object-fit: contain;
+		border-radius: var(--radius-md);
+		border: 1px solid rgba(255, 255, 255, 0.15);
+		box-shadow: 0 24px 60px rgba(0, 0, 0, 0.65);
+	}
+
+	@media (max-width: 760px) {
+		.case-header {
+			padding: 1.4rem;
+		}
+		.case-specs {
+			grid-template-columns: 1fr;
+		}
+		.prose {
+			padding: 1.5rem 1.25rem 2rem;
+		}
+		.case-nav {
+			grid-template-columns: 1fr;
+		}
+		.case-nav__card--next {
+			text-align: left;
+		}
+	}
+</style>

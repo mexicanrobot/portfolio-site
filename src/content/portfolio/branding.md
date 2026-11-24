@@ -1,8 +1,11 @@
 ---
 title: "Branding"
-description: ""
+description: "Visual identity and mascot design exercises for a cookie brand and a tea app."
 tags: ["design"]
-pubDate: "Jan 28 2026"
+company: "Design Exercise"
+role: "Brand & Identity Design"
+stack: ["Logo Design", "Mascot Illustration", "Visual Identity"]
+featured: true
 heroImage: "/blog/branding/branding-cover.png"
 postOrder: 1
 ---

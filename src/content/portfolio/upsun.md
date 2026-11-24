@@ -1,8 +1,11 @@
 ---
 title: "Upsun website + component library"
-description: "Here is a sample of some basic Markdown syntax that can be used when writing Markdown content in Astro."
+description: "Architected a Figma-to-Style Dictionary design token pipeline, multi-theme support, and a TypeScript component library for Upsun."
 tags: ["code"]
-pubDate: "Jan 28 2026"
+company: "Upsun"
+role: "Frontend & Design Systems"
+stack: ["TypeScript", "Style Dictionary", "Figma", "Theming"]
+featured: true
 heroImage: "/blog/upsun-cover.png"
 postOrder: 1
 ---

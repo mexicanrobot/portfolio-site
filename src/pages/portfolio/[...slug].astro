@@ -1,21 +1,48 @@
 ---
-import { type CollectionEntry, getCollection } from 'astro:content';
+import { type CollectionEntry, getCollection, render } from 'astro:content';
 import BlogPost from '../../layouts/BlogPost.astro';
-import { render } from 'astro:content';
 
 export async function getStaticPaths() {
 	const posts = await getCollection('portfolio');
-	return posts.map((post) => ({
-		params: { slug: post.id },
-		props: post,
-	}));
-}
-type Props = CollectionEntry<'portfolio'>;
 
-const post = Astro.props;
+	const byCategory = (cat: string) =>
+		posts
+			.filter((p) => p.data.tags.includes(cat))
+			.sort((a, b) => a.data.postOrder - b.data.postOrder);
+
+	const codePosts = byCategory('code');
+	const designPosts = byCategory('design');
+
+	return posts.map((post) => {
+		const isDesign = post.data.tags.includes('design');
+		const list = isDesign ? designPosts : codePosts;
+		const idx = list.findIndex((p) => p.id === post.id);
+		const prevPost = idx > 0 ? list[idx - 1] : undefined;
+		const nextPost = idx >= 0 && idx < list.length - 1 ? list[idx + 1] : undefined;
+
+		return {
+			params: { slug: post.id },
+			props: {
+				post,
+				prev: prevPost ? { id: prevPost.id, title: prevPost.data.title } : undefined,
+				next: nextPost ? { id: nextPost.id, title: nextPost.data.title } : undefined,
+				moduleNumber: idx >= 0 ? String(idx + 1).padStart(2, '0') : '01',
+			},
+		};
+	});
+}
+
+interface Props {
+	post: CollectionEntry<'portfolio'>;
+	prev?: { id: string; title: string };
+	next?: { id: string; title: string };
+	moduleNumber: string;
+}
+
+const { post, prev, next, moduleNumber } = Astro.props;
 const { Content } = await render(post);
 ---
 
-<BlogPost {...post.data}>
+<BlogPost {...post.data} prev={prev} next={next} moduleNumber={moduleNumber}>
 	<Content />
 </BlogPost>

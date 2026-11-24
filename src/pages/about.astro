@@ -1,32 +1,313 @@
 ---
-import Layout from '../layouts/BlogPost.astro';
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { SITE_TITLE } from '../consts';
+
+const interests = [
+	{
+		ch: 'CH-01',
+		title: '2000s Sony Hardware',
+		body: 'A massive soft spot for consumer electronics Sony designed in the 2000s—tactile industrial design, brushed metal, and uncompromising craft.',
+		tag: 'INDUSTRIAL DESIGN',
+	},
+	{
+		ch: 'CH-02',
+		title: 'Audiophile Gear',
+		body: 'Dabbling in personal audio territory—especially in-ear monitors (IEMs) and open-back headphones for critical listening.',
+		tag: 'HI-FI AUDIO',
+	},
+	{
+		ch: 'CH-03',
+		title: 'Concerts & Live Music',
+		body: 'Huge fan of live shows and concert photography—even if ticket prices have been making it an increasingly expensive habit.',
+		tag: 'LIVE SOUND',
+	},
+	{
+		ch: 'CH-04',
+		title: 'Story-Driven RPGs',
+		body: 'Gravitating toward atmospheric, narrative-heavy RPGs like Disco Elysium and Clair Obscur: Expedition 33.',
+		tag: 'GAMING',
+	},
+	{
+		ch: 'CH-05',
+		title: 'Wide-Angle Photography',
+		body: 'Dabbling in everyday photography with a strong preference for a wide-angle lens and dramatic perspective.',
+		tag: 'OPTICS',
+	},
+	{
+		ch: 'CH-06',
+		title: 'Travel',
+		body: 'Fortunate to have explored parts of Mexico, Japan, South Korea, and Europe—always soaking up local design and food.',
+		tag: 'FIELD NOTES',
+	},
+	{
+		ch: 'CH-07',
+		title: 'Cooking (and Cooking YouTube)',
+		body: 'Enjoying time in the kitchen—and spending just as much time watching culinary YouTube videos for inspiration.',
+		tag: 'KITCHEN LAB',
+	},
+];
 ---
 
-<Layout
-	title="About Me"
-	description="About Alejandro Abaroa, a software engineer with a passion for design, UI/UX, and building products that people love."
-	pubDate={new Date('January 28 2026')}
-	heroImage="/about-me.jpg"
->
-	<p>
-		Hello! In case you want to know more about me, here's a bit of my background:
-		<ul>
-			<li>Born and raised in Tijuana, Mexico.</li>
-			<li>I live in the San Diego, CA area.</li>
-			<li>I have a Bachelor's in Computer Engineering and a Master's in Graphic Design.</li>
-			<li>I've worked at companies like Upsun, Samsung Electronics, and Thermo Fisher.</li>
-		</ul>
-	</p>
-	<p>
-		Some of my favorite things to do are:
-		<ul>
-			<li>I love concerts and concert photography, sadly it's been getting more and more expensive to keep this hobby.</li>
-			<li>Gaming: I love RPGs like Disco Elysium and Expedition 33</li>
-			<li>Cooking and watching youtube cooking videos (watching videos)</li>
-			<li>Dabble a bit of photography, I love my wide angle lens</li>
-			<li>I have a massive love for any consumer electronics that Sony made, especially in the 2000s</li>
-			<li>Traveling: I've been lucky enough to visit parts of Mexico, Japan, Korea and Europe</li>
-			<li>Also dabble a bit into audiophile territory: I love my IEMs and open back headphones.</li>
-		</ul>
-	</p>
-</Layout>
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead
+			title={`About Me | ${SITE_TITLE}`}
+			description="About Alejandro Abaroa, a software engineer with a Master's in Graphic Design based in San Diego, CA."
+			image="/about-me.jpg"
+		/>
+	</head>
+	<body>
+		<Header />
+		<main>
+			<!-- PERSONAL DOSSIER HERO -->
+			<section class="dossier panel reveal">
+				<div class="dossier__bar">
+					<div class="dossier__bar-left">
+						<span class="led led--ok" aria-hidden="true"></span>
+						<span class="mono-label">OPERATOR PROFILE // ALEJANDRO ABAROA</span>
+					</div>
+					<span class="mono-label">TIJUANA, MX → SAN DIEGO, CA</span>
+				</div>
+
+				<div class="dossier__grid">
+					<div class="dossier__photo-bay">
+						<div class="dossier__photo-frame">
+							<img src="/about-me.jpg" alt="Alejandro Abaroa" width={720} height={720} />
+						</div>
+						<div class="dossier__photo-caption">
+							<span class="mono-label">PHOTO // ARCHIVE</span>
+							<span class="mono-label">SAN DIEGO AREA</span>
+						</div>
+					</div>
+
+					<div class="dossier__info">
+						<div class="section-kicker">
+							<span class="tag tag--accent">B.S. COMPUTER ENGINEERING</span>
+							<span class="tag">M.A. GRAPHIC DESIGN</span>
+						</div>
+						<h1>About Me</h1>
+						<p class="dossier__lead">
+							Born and raised in Tijuana, Mexico, and now based in the San Diego, CA area. I build web platforms and design systems at the intersection of visual craft and frontend engineering.
+						</p>
+
+						<div class="dossier__specs">
+							<div class="dossier__spec">
+								<span class="mono-label">ORIGIN</span>
+								<span class="dossier__spec-val">Tijuana, Mexico</span>
+							</div>
+							<div class="dossier__spec">
+								<span class="mono-label">CURRENT BASE</span>
+								<span class="dossier__spec-val">San Diego, CA Area</span>
+							</div>
+							<div class="dossier__spec">
+								<span class="mono-label">EDUCATION</span>
+								<span class="dossier__spec-val">B.S. Computer Eng. &amp; M.A. Graphic Design</span>
+							</div>
+							<div class="dossier__spec">
+								<span class="mono-label">TRACK RECORD</span>
+								<span class="dossier__spec-val">Upsun · Samsung Electronics · Thermo Fisher</span>
+							</div>
+						</div>
+
+						<div class="dossier__actions">
+							<a href="/AlexAbaroaCV.pdf" target="_blank" rel="noopener noreferrer" class="btn btn--primary">
+								Download Resume ↗
+							</a>
+							<a href="/portfolio" class="btn">Code Work →</a>
+							<a href="/portfolio/design" class="btn">Design Work →</a>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- SIGNAL & NOISE / INTERESTS -->
+			<section class="interests-section reveal" aria-label="Favorite things">
+				<div class="section-header">
+					<div>
+						<div class="section-kicker">
+							<span class="led" aria-hidden="true"></span>
+							<span class="mono-label">OFF THE CLOCK // SIGNAL &amp; NOISE</span>
+						</div>
+						<h2>Things I obsess over.</h2>
+					</div>
+					<span class="mono-label">07 CHANNELS</span>
+				</div>
+
+				<div class="interests-grid">
+					{
+						interests.map((item, idx) => (
+							<article class:list={['interest-card panel-elevated', { 'interest-card--featured': idx === 0 }]}>
+								<div class="interest-card__top">
+									<span class="mono-label">{item.ch}</span>
+									<span class:list={['tag', { 'tag--accent': idx === 0 }]}>{item.tag}</span>
+								</div>
+								<h3 class="interest-card__title">{item.title}</h3>
+								<p class="interest-card__body">{item.body}</p>
+							</article>
+						))
+					}
+				</div>
+			</section>
+		</main>
+		<Footer />
+	</body>
+</html>
+
+<style>
+	.dossier {
+		overflow: hidden;
+	}
+
+	.dossier__bar {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1rem;
+		padding: 0.7rem 1.5rem;
+		background: var(--surface-elevated);
+		border-bottom: 1px solid var(--border);
+		flex-wrap: wrap;
+	}
+
+	.dossier__bar-left {
+		display: flex;
+		align-items: center;
+		gap: 0.55rem;
+	}
+
+	.dossier__grid {
+		display: grid;
+		grid-template-columns: 0.85fr 1.15fr;
+		gap: 2.25rem;
+		padding: 2rem 1.75rem;
+		align-items: center;
+	}
+
+	.dossier__photo-bay {
+		border-radius: var(--radius-md);
+		background: var(--surface-elevated);
+		border: 1px solid var(--border-strong);
+		box-shadow: var(--shadow-bevel);
+		overflow: hidden;
+	}
+
+	.dossier__photo-frame {
+		aspect-ratio: 4 / 3;
+		background: var(--surface-recessed);
+		overflow: hidden;
+	}
+
+	.dossier__photo-frame img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+	.dossier__photo-caption {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		padding: 0.55rem 0.9rem;
+		border-top: 1px solid var(--border);
+	}
+
+	.dossier__lead {
+		font-size: 1.06rem;
+		line-height: 1.6;
+		color: var(--ink);
+		margin-bottom: 1.35rem;
+	}
+
+	.dossier__specs {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 0.75rem;
+		margin-bottom: 1.5rem;
+	}
+
+	.dossier__spec {
+		display: flex;
+		flex-direction: column;
+		gap: 0.25rem;
+		padding: 0.75rem 0.9rem;
+		border-radius: var(--radius-sm);
+		background: var(--surface-recessed);
+		border: 1px solid var(--border);
+		box-shadow: var(--shadow-recessed);
+	}
+
+	.dossier__spec-val {
+		font-size: 0.92rem;
+		font-weight: 600;
+		color: var(--ink);
+		line-height: 1.35;
+	}
+
+	.dossier__actions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.65rem;
+	}
+
+	.interests-section {
+		margin-top: 3.5rem;
+	}
+
+	.interests-grid {
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		gap: 1.2rem;
+	}
+
+	.interest-card {
+		padding: 1.3rem;
+		display: flex;
+		flex-direction: column;
+		gap: 0.55rem;
+	}
+
+	.interest-card--featured {
+		grid-column: 1 / -1;
+		background: var(--surface);
+		border-color: var(--border-strong);
+	}
+
+	.interest-card__top {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 0.5rem;
+		margin-bottom: 0.2rem;
+	}
+
+	.interest-card__title {
+		margin: 0;
+		font-size: 1.12rem;
+	}
+
+	.interest-card__body {
+		margin: 0;
+		font-size: 0.93rem;
+		line-height: 1.58;
+	}
+
+	@media (max-width: 900px) {
+		.dossier__grid {
+			grid-template-columns: 1fr;
+			padding: 1.5rem;
+		}
+		.interests-grid {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+	}
+
+	@media (max-width: 600px) {
+		.dossier__specs,
+		.interests-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>
