@@ -23,22 +23,43 @@ const designCount = allPosts.filter((p) => p.data.tags.includes('design')).lengt
 const experience = [
 	{
 		code: 'LOG-01',
-		company: 'Upsun / Platform.sh',
-		focus: 'Design Systems & Frontend Architecture',
+		active: true,
+		company: 'Thermo Fisher Scientific',
+		focus: 'Agentic AI & Decision-Automation Systems',
 		summary:
-			'Architected Figma-to-Style Dictionary token pipelines, multi-theme TypeScript component libraries, pricing calculators, and multi-region i18n.',
-		tags: ['TypeScript', 'React', 'Style Dictionary', 'Storybook'],
+			'Building AI and decision-automation systems for manufacturing and clinical diagnostics: a daily planning-signal platform using configurable rules, parallel Kubernetes workers, and an LLM agent for ambiguous cases, plus a conversational clinical PCT diagnostics assistant powered by multi-backend RAG (OpenAI & Google).',
+		tags: [
+			'Python / FastAPI',
+			'React',
+			'OpenAI Agents SDK',
+			'Google ADK',
+			'AWS EKS / KEDA',
+			'Databricks',
+			'Claude Code',
+			'Codex',
+		],
 	},
 	{
 		code: 'LOG-02',
-		company: 'Thermo Fisher',
+		active: false,
+		company: 'Upsun / Platform.sh',
+		focus: 'Design Systems & Frontend Architecture',
+		summary:
+			'Architected Figma-to-Style Dictionary token pipelines, multi-theme TypeScript component libraries, interactive pricing calculators, and multi-region i18n.',
+		tags: ['TypeScript', 'React', 'Style Dictionary', 'Storybook'],
+	},
+	{
+		code: 'LOG-03',
+		active: false,
+		company: 'Thermo Fisher Scientific',
 		focus: 'Komodo Design System Foundations',
 		summary:
 			'Built core HTML/CSS foundations documented in Storybook and automated Sketch/Abstract design token extraction into CSS variables.',
 		tags: ['Design Tokens', 'CSS Architecture', 'Storybook', 'Abstract API'],
 	},
 	{
-		code: 'LOG-03',
+		code: 'LOG-04',
+		active: false,
 		company: 'Samsung Electronics',
 		focus: 'Large-Format Displays & 3D Showcases',
 		summary:
@@ -61,7 +82,7 @@ const experience = [
 				<div class="hero-chassis__rail">
 					<div class="hero-chassis__rail-left">
 						<span class="led led--ok" aria-hidden="true"></span>
-						<span class="mono-label">UNIT 01 // FRONTEND ARCHITECTURE &amp; DESIGN SYSTEMS</span>
+						<span class="mono-label">UNIT 01 // AGENTIC AI · DESIGN SYSTEMS · FRONTEND</span>
 					</div>
 					<span class="mono-label hero-chassis__coords">SAN DIEGO, CA · 32.7°N</span>
 				</div>
@@ -71,16 +92,20 @@ const experience = [
 						<div class="hero-eyebrow">
 							<span class="tag tag--accent">SOFTWARE ENGINEER</span>
 							<span class="tag">M.A. GRAPHIC DESIGN</span>
+							<span class="tag tag--live">
+								<span class="led led--ok" aria-hidden="true"></span>
+								THERMO FISHER · CURRENT
+							</span>
 						</div>
 
 						<h1 class="hero-title">Hello, I&rsquo;m Alex.</h1>
 
 						<p class="hero-lead">
-							I specialize in the <strong>middle ground</strong>—where design systems, frontend architecture, and user experience meet.
+							I specialize in the <strong>middle ground</strong>—where agentic AI, design systems, and frontend architecture meet.
 						</p>
 
 						<p class="hero-bio">
-							With 10+ years of experience at companies like Upsun, Samsung Electronics, and Thermo Fisher, I build accessible, performant, and scalable web platforms that help brands grow and developers move faster.
+							Currently building AI and decision-automation systems for manufacturing and clinical diagnostics at Thermo Fisher Scientific. With 10+ years across Thermo Fisher, Upsun, and Samsung Electronics, I build accessible, performant, and scalable platforms that help brands grow and engineering teams move faster.
 						</p>
 
 						<div class="hero-actions">
@@ -150,9 +175,13 @@ const experience = [
 				<div class="exp-grid">
 					{
 						experience.map((item) => (
-							<article class="exp-card panel-elevated">
+							<article class:list={['exp-card panel-elevated', { 'exp-card--active': item.active }]}>
 								<div class="exp-card__top">
-									<span class="mono-label">{item.code}</span>
+									<div class="exp-card__code-row">
+										{item.active && <span class="led led--ok" aria-hidden="true"></span>}
+										<span class="mono-label">{item.code}</span>
+										{item.active && <span class="tag tag--accent">CURRENT</span>}
+									</div>
 									<span class="exp-card__screw" aria-hidden="true"></span>
 								</div>
 								<h3 class="exp-card__company">{item.company}</h3>
@@ -280,6 +309,12 @@ const experience = [
 		flex-wrap: wrap;
 		gap: 0.45rem;
 		margin-bottom: 1rem;
+	}
+
+	.tag--live {
+		color: var(--ink);
+		background: var(--surface-elevated);
+		border-color: var(--border-strong);
 	}
 
 	.hero-title {
@@ -414,15 +449,22 @@ const experience = [
 	/* Experience Cards */
 	.exp-grid {
 		display: grid;
-		grid-template-columns: repeat(3, minmax(0, 1fr));
+		grid-template-columns: repeat(2, minmax(0, 1fr));
 		gap: 1.2rem;
 	}
 
 	.exp-card {
-		padding: 1.35rem;
+		padding: 1.4rem;
 		display: flex;
 		flex-direction: column;
 		gap: 0.5rem;
+	}
+
+	.exp-card--active {
+		border-color: var(--border-strong);
+		box-shadow:
+			var(--shadow-card),
+			0 0 0 1px var(--accent-soft);
 	}
 
 	.exp-card__top {
@@ -430,6 +472,12 @@ const experience = [
 		align-items: center;
 		justify-content: space-between;
 		margin-bottom: 0.3rem;
+	}
+
+	.exp-card__code-row {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
 	}
 
 	.exp-card__screw {
